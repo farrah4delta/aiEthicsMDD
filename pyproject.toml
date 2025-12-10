@@ -25,9 +25,12 @@ dev = [
     "ruff>=0.1.0",
 ]
 
+[tool.setuptools]
+packages = ["aiei_l4"]
+package-dir = {"" = "."}
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
-
