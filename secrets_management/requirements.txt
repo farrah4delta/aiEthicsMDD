@@ -1,0 +1,18 @@
+
+# Install with: pip install -r requirements.txt
+
+# Google Generative AI (Gemini) client
+google-genai>=0.8.0
+
+google-generativeai>=0.8.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Optional: For enhanced logging and debugging
+# coloredlogs>=15.0.1
+# tqdm>=4.65.0
+
+xai-sdk
+deepeval
+regex>=2023.0
