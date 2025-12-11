@@ -20,11 +20,10 @@ from deepeval.test_case import LLMTestCase
 from xai_sdk import Client as xai_client
 from xai_sdk.chat import user
 
-#from google import genai
+
 import google.generativeai as genai
 
 # --- Config ---
-# OPENAI_MODEL = "gpt-4o"
 GEMINI_MODEL = "gemini-2.5-flash"
 XAI_MODEL="grok-4-1-fast-reasoning"
 TEMPERATURE = 0
@@ -35,7 +34,7 @@ xai_client = xai_client(
 )
 
 gemini_client = genai.GenerativeModel(GEMINI_MODEL)
-config = genai.GenerationConfig(           # ← note: no .types. needed in recent versions
+gemini_config = genai.GenerationConfig(
             temperature=TEMPERATURE,
             max_output_tokens=MAX_TOKENS
         )
@@ -165,9 +164,13 @@ def load_prompts(prompts_file: str) -> dict:
 def call_xai(prompt):
     # Invoke the XAI model
     try:
-        chat = xai_client.chat.create(model=XAI_MODEL)
+        chat = xai_client.chat.create(
+            model=XAI_MODEL,
+            temperature=TEMPERATURE,
+            max_tokens=MAX_TOKENS
+        )
         chat.append(user(prompt))
-        response = chat.sample()(temperature=TEMPERATURE, max_tokens=MAX_TOKENS)
+        response = chat.sample()
         return response.content
     except Exception as e:
         return f"ERROR: {e}"
@@ -176,8 +179,8 @@ def call_gemini(prompt: str) -> str:
     # Invoke the Gemini model
     try:
         response = gemini_client.generate_content(
-            contents=prompt,  # can be plain string or list of parts
-            generation_config=config
+            contents=prompt,
+            generation_config=gemini_config
         )
 
         return response.text.strip()
